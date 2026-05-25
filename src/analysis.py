@@ -634,7 +634,7 @@ def generate_analysis_report(results: dict, save_path: str = None) -> str:
     lines.append("=" * 70)
     report = "\n".join(lines)
 
-    with open(save_path, "w") as f:
+    with open(save_path, "w", encoding="utf-8") as f:
         f.write(report)
     print(f"  [Report saved] {save_path}")
 
