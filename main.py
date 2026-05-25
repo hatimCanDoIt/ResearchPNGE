@@ -20,7 +20,27 @@ Usage
 import sys
 import os
 import argparse
+import io
 import pandas as pd
+
+
+def _configure_console_encoding() -> None:
+    """Avoid UnicodeEncodeError on Windows default cp1252 consoles."""
+    if sys.platform != "win32":
+        return
+    for stream_name in ("stdout", "stderr"):
+        stream = getattr(sys, stream_name, None)
+        buffer = getattr(stream, "buffer", None)
+        if buffer is None:
+            continue
+        setattr(
+            sys,
+            stream_name,
+            io.TextIOWrapper(buffer, encoding="utf-8", errors="replace", line_buffering=True),
+        )
+
+
+_configure_console_encoding()
 
 # Ensure src/ is importable from root
 sys.path.insert(0, os.path.dirname(__file__))
@@ -172,7 +192,7 @@ def main():
     print("=" * 65)
     generate_analysis_report(all_results)
 
-    print("\n✓ Full pipeline complete. Results saved to:", RESULTS_DIR)
+    print("\nFull pipeline complete. Results saved to:", RESULTS_DIR)
 
 
 if __name__ == "__main__":

@@ -10,3 +10,4 @@ data/results/*.png
 data/results/*.csv
 data/results/*.txt
 data/results/*.pkl
+!data/results/.gitkeep
